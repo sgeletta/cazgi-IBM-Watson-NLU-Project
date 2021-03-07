@@ -29,25 +29,74 @@ app.get("/",(req,res)=>{
     res.render('index.html');
   });
 
-app.get("/url/emotion", (req,res) => {
+app.get("/url/emotion", async(req,res) => {
+try{
+        const analyzeParams={
+            'url':req.query.url,
+            'features':{
+                'emotion':{limit:3}
+            }
+        };
+        const response = await getNLUInstance(analyzeParams)
+        const doc = response.result.emotion.document
+        return res.send(doc.emotion);
+    }
+    catch(err){
+        console.log('error:', err);
+    }
+   });
 
-    return res.send({"happy":"90","sad":"10"});
-});
 
-app.get("/url/sentiment", (req,res) => {
-    getNLUInstance();
-    return res.send("url sentiment for "+req.query.url);
-});
+app.get("/url/sentiment", async(req,res) => {
+    try{
+        const analyzeParams={
+            'url':req.query.url,
+            'features':{
+                'sentiment':{limit:3}
+            }
+        };
+        const response = await getNLUInstance(analyzeParams)
+        const doc = response.result.sentiment.document
+        return res.send(doc);
+    }
+    catch(err){
+        console.log('error:', err);
+    }
+   });
 
-app.get("/text/emotion", (req,res) => {
-    getNLUInstance();
-    return res.send({"happy":"10","sad":"90"});
-});
+app.get("/text/emotion", async(req,res) => {
+try{
+        const analyzeParams={
+            'text':req.query.text,
+            'features':{
+                'emotion':{limit:3}
+            }
+        };
+        const response = await getNLUInstance(analyzeParams)
+        const doc = response.result.emotion.document
+        return res.send(doc.emotion);
+    }
+    catch(err){
+        console.log('error:', err);
+    }
+   });
 
-app.get("/text/sentiment", (req,res) => {
-    getNLUInstance();
-    return res.send("text sentiment for "+req.query.text);
-});
+app.get("/text/sentiment", async(req,res) => {
+try{
+        const analyzeParams={
+            'text':req.query.text,
+            'features':{
+                'sentiment':{limit:3}
+            }
+        };
+        const response = await getNLUInstance(analyzeParams)
+        const doc = response.result.sentiment.document
+        return res.send(doc);
+    }
+    catch(err){
+        console.log('error:', err);
+    }
+   });
 
 let server = app.listen(8080, () => {
     console.log('Listening', server.address().port)
